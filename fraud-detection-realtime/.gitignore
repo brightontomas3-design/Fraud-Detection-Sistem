@@ -1,0 +1,8 @@
+data/raw/*.csv
+data/stream_input/
+data/checkpoints/
+logs/
+__pycache__/
+.pytest_cache/
+.venv/
+data/cache/

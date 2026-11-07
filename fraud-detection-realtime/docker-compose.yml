@@ -1,0 +1,153 @@
+# docker-compose.yml - Real-Time Fraud Detection System (Docker Desktop)
+#
+#   docker compose build                         # sekali: membuat image aplikasi (Python + Java + Spark)
+#   docker compose --profile train run --rm trainer      # (opsional) melatih ulang model Spark MLlib
+#   docker compose up -d                         # Kafka, PostgreSQL, Spark Streaming, dasbor, Kafka UI
+#   docker compose --profile producer up producer        # mulai mengirim 2 CSV ke Kafka (real-time)
+#
+# Alamat: dasbor http://localhost:8501 · Kafka UI http://localhost:8080 · Spark UI http://localhost:4040
+#         PostgreSQL localhost:5432 (frauddb / fraud / fraud123) -> bisa dihubungkan ke Power BI
+
+name: fraud-detection
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+  image: fraud-detection-app:1.0
+  environment:
+    KAFKA_BOOTSTRAP: kafka:9092
+    PG_HOST: postgres
+    PG_PORT: "5432"
+    PG_DB: frauddb
+    PG_USER: fraud
+    PG_PASSWORD: fraud123
+    CHECKPOINT_DIR: /checkpoints
+    SPARK_DRIVER_MEMORY: 1g
+    TZ: UTC
+  volumes:
+    - ./data:/app/data          # <- 2 file CSV ada di ./data/raw
+    - ./models:/app/models      # model hasil training
+    - ./docs:/app/docs          # hasil evaluasi & diagram
+
+services:
+  # ---------------------------------------------------------- 2. Data Ingestion: Apache Kafka (KRaft, tanpa ZooKeeper)
+  kafka:
+    image: apache/kafka:3.7.1
+    container_name: kafka
+    ports:
+      - "9094:9094"             # untuk program di laptop (di luar Docker): 127.0.0.1:9094
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://127.0.0.1:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 15s
+      retries: 15
+      start_period: 20s
+
+  kafka-init:                   # membuat topic: transactions (3 partisi) & fraud_alerts
+    image: apache/kafka:3.7.1
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic transactions --partitions 3 --replication-factor 1 &&
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic fraud_alerts --partitions 1 --replication-factor 1 &&
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --describe
+    restart: "no"
+
+  kafka-ui:                     # melihat topic, partisi, offset dan isi pesan di browser
+    image: kafbat/kafka-ui:latest
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: fraud-detection
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
+  # ---------------------------------------------------------- 4. Data Storage: PostgreSQL
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: frauddb
+      POSTGRES_USER: fraud
+      POSTGRES_PASSWORD: fraud123
+      TZ: UTC
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./storage/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fraud -d frauddb"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ---------------------------------------------------------- 5. Big Data Analytics: training Spark MLlib (sekali)
+  trainer:
+    <<: *app
+    profiles: ["train"]
+    command: python spark_jobs/train_models.py
+
+  # ---------------------------------------------------------- 3+5. Stream Processing + scoring MLlib
+  spark-streaming:
+    <<: *app
+    container_name: spark-streaming
+    command: python spark_jobs/streaming_job.py --source kafka --starting-offsets earliest
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./docs:/app/docs
+      - checkpoints:/checkpoints  # checkpoint Spark di volume Docker (lebih aman daripada folder Windows)
+    ports:
+      - "4040:4040"             # Spark UI
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ---------------------------------------------------------- 1. Data Sources -> Kafka Producer
+  producer:
+    <<: *app
+    profiles: ["producer"]
+    command: python producer/csv_producer.py --rate 20
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+
+  # ---------------------------------------------------------- 6. Visualisasi: dasbor Streamlit
+  dashboard:
+    <<: *app
+    container_name: dashboard
+    command: streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
+    ports:
+      - "8501:8501"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  checkpoints:

@@ -1,0 +1,116 @@
+{
+  "source": "card",
+  "algorithm": "GBTClassifier (Spark MLlib)",
+  "thresholds": {
+    "block": 0.611038,
+    "review": 0.027131,
+    "valid_best_f1": 0.8039
+  },
+  "test": {
+    "rows": 56962,
+    "fraud": 75,
+    "fraud_rate_pct": 0.1317,
+    "roc_auc": 0.9548,
+    "pr_auc": 0.7179,
+    "BLOCK_only (prob >= ambang blokir)": {
+      "precision": 0.8814,
+      "recall": 0.6933,
+      "f1": 0.7761,
+      "false_positive_rate": 0.00012,
+      "tp": 52,
+      "fp": 7,
+      "fn": 23,
+      "tn": 56880
+    },
+    "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+      "precision": 0.1929,
+      "recall": 0.8,
+      "f1": 0.3109,
+      "false_positive_rate": 0.00441,
+      "tp": 60,
+      "fp": 251,
+      "fn": 15,
+      "tn": 56636
+    }
+  },
+  "comparison": {
+    "GBTClassifier": {
+      "thresholds": {
+        "block": 0.611038,
+        "review": 0.027131,
+        "valid_best_f1": 0.8039
+      },
+      "test": {
+        "rows": 56962,
+        "fraud": 75,
+        "fraud_rate_pct": 0.1317,
+        "roc_auc": 0.9548,
+        "pr_auc": 0.7179,
+        "BLOCK_only (prob >= ambang blokir)": {
+          "precision": 0.8814,
+          "recall": 0.6933,
+          "f1": 0.7761,
+          "false_positive_rate": 0.00012,
+          "tp": 52,
+          "fp": 7,
+          "fn": 23,
+          "tn": 56880
+        },
+        "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+          "precision": 0.1929,
+          "recall": 0.8,
+          "f1": 0.3109,
+          "false_positive_rate": 0.00441,
+          "tp": 60,
+          "fp": 251,
+          "fn": 15,
+          "tn": 56636
+        }
+      }
+    },
+    "LogisticRegression (pembanding)": {
+      "thresholds": {
+        "block": 0.999992,
+        "review": 0.906765,
+        "valid_best_f1": 0.7755
+      },
+      "test": {
+        "rows": 56962,
+        "fraud": 75,
+        "fraud_rate_pct": 0.1317,
+        "roc_auc": 0.9832,
+        "pr_auc": 0.7347,
+        "BLOCK_only (prob >= ambang blokir)": {
+          "precision": 0.9615,
+          "recall": 0.6667,
+          "f1": 0.7874,
+          "false_positive_rate": 4e-05,
+          "tp": 50,
+          "fp": 2,
+          "fn": 25,
+          "tn": 56885
+        },
+        "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+          "precision": 0.1899,
+          "recall": 0.8533,
+          "f1": 0.3107,
+          "false_positive_rate": 0.0048,
+          "tp": 64,
+          "fp": 273,
+          "fn": 11,
+          "tn": 56614
+        }
+      }
+    }
+  },
+  "split": {
+    "by": "Time",
+    "train": "Time < 120396",
+    "valid": "120396 <= Time < 145248",
+    "test": "Time >= 145248 (juga data yang di-stream)",
+    "train_rows": 170882,
+    "train_fraud": 360
+  },
+  "train_seconds": 63.0,
+  "trained_at": "2026-10-11T14:15:17"
+}

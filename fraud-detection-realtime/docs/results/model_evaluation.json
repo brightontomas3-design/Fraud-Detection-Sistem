@@ -1,0 +1,379 @@
+{
+  "type": "FACTUAL RESULT - dihitung dari eksekusi nyata pada data uji (split waktu)",
+  "bank": {
+    "source": "bank",
+    "algorithm": "KMeans clustering (Spark MLlib) + jarak ke pusat cluster",
+    "label_available": false,
+    "rows": 2512,
+    "features": [
+      "log_amount",
+      "amt_ratio",
+      "amt_z",
+      "is_debit",
+      "ch_atm",
+      "ch_online",
+      "ch_branch",
+      "device_accounts",
+      "ip_accounts",
+      "new_location",
+      "acct_n"
+    ],
+    "k_selected": 4,
+    "silhouette_by_k": {
+      "3": 0.2897,
+      "4": 0.3762,
+      "5": 0.3657,
+      "6": 0.3493,
+      "7": 0.369,
+      "8": 0.3278
+    },
+    "cluster_sizes": {
+      "3": 657,
+      "1": 545,
+      "2": 670,
+      "0": 640
+    },
+    "centers_scaled": [
+      [
+        -0.2903225067220358,
+        -0.44183055903916124,
+        -0.44976193276279486,
+        -0.15791883010394403,
+        -0.7042237886936922,
+        1.4479556787905183,
+        -0.726478046430656,
+        0.027894028370559418,
+        -0.009621963166422283,
+        0.0,
+        0.016414713474888494
+      ],
+      [
+        1.0609246224449351,
+        1.5372086564918555,
+        1.5434789796817285,
+        -0.06914768608356223,
+        -0.01841745661896347,
+        -0.019434776641036915,
+        0.03734207114743944,
+        -0.04440682257108218,
+        0.0403145568053512,
+        0.0,
+        -0.07397382964324294
+      ],
+      [
+        -0.3113859446439724,
+        -0.4408786308402106,
+        -0.44867519544267775,
+        -0.1266494724209055,
+        -0.7042237886936923,
+        -0.6903539420923593,
+        1.3759561155898408,
+        0.005132682012770799,
+        -0.01790709572021554,
+        0.0,
+        0.09890921486810621
+      ],
+      [
+        -0.279709181155164,
+        -0.39515749975655834,
+        -0.38468192695853964,
+        0.3403480771751482,
+        1.4194378646058954,
+        -0.6903539420923591,
+        -0.726478046430656,
+        0.004430202732911368,
+        -0.005807645205253181,
+        0.0,
+        -0.05549292759512754
+      ]
+    ],
+    "global_mean_amount": 297.5938,
+    "thresholds": {
+      "review_distance_p97_5": 3.7815,
+      "high_distance_p99_5": 4.3317
+    },
+    "reason_thresholds": {
+      "device_accounts_p95": 8.0,
+      "ip_accounts_p95": 9.0
+    },
+    "flagged_review_rows": 63,
+    "flagged_pct": 2.51,
+    "top_anomalies": [
+      {
+        "tx_id": "TX001492",
+        "account_id": "AC00375",
+        "amount": 506.26,
+        "channel": "ATM",
+        "location": "Baltimore",
+        "distance": 5.215,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX002254",
+        "account_id": "AC00236",
+        "amount": 0.32,
+        "channel": "ATM",
+        "location": "Boston",
+        "distance": 4.95,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX001672",
+        "account_id": "AC00335",
+        "amount": 27.25,
+        "channel": "Branch",
+        "location": "Kansas City",
+        "distance": 4.876,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX000513",
+        "account_id": "AC00012",
+        "amount": 8.65,
+        "channel": "Online",
+        "location": "Las Vegas",
+        "distance": 4.731,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX001880",
+        "account_id": "AC00460",
+        "amount": 0.84,
+        "channel": "ATM",
+        "location": "Austin",
+        "distance": 4.707,
+        "reasons": ""
+      },
+      {
+        "tx_id": "TX001266",
+        "account_id": "AC00176",
+        "amount": 595.91,
+        "channel": "ATM",
+        "location": "San Antonio",
+        "distance": 4.696,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX001015",
+        "account_id": "AC00011",
+        "amount": 688.36,
+        "channel": "Branch",
+        "location": "Memphis",
+        "distance": 4.582,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX000388",
+        "account_id": "AC00135",
+        "amount": 39.66,
+        "channel": "Branch",
+        "location": "Virginia Beach",
+        "distance": 4.577,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX002306",
+        "account_id": "AC00202",
+        "amount": 5.66,
+        "channel": "Branch",
+        "location": "Fresno",
+        "distance": 4.536,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      },
+      {
+        "tx_id": "TX000501",
+        "account_id": "AC00433",
+        "amount": 120.9,
+        "channel": "Branch",
+        "location": "Tucson",
+        "distance": 4.46,
+        "reasons": "IP_DIPAKAI_BANYAK_AKUN"
+      }
+    ],
+    "note": "Dataset ini tidak memiliki label fraud. Hasilnya adalah ANOMALI (transaksi paling tidak biasa), bukan fraud yang terbukti; karena itu keputusan maksimal = TINJAU, tidak pernah BLOKIR otomatis.",
+    "train_seconds": 25.9,
+    "trained_at": "2026-10-11T14:12:45"
+  },
+  "card": {
+    "source": "card",
+    "algorithm": "GBTClassifier (Spark MLlib)",
+    "thresholds": {
+      "block": 0.611038,
+      "review": 0.027131,
+      "valid_best_f1": 0.8039
+    },
+    "test": {
+      "rows": 56962,
+      "fraud": 75,
+      "fraud_rate_pct": 0.1317,
+      "roc_auc": 0.9548,
+      "pr_auc": 0.7179,
+      "BLOCK_only (prob >= ambang blokir)": {
+        "precision": 0.8814,
+        "recall": 0.6933,
+        "f1": 0.7761,
+        "false_positive_rate": 0.00012,
+        "tp": 52,
+        "fp": 7,
+        "fn": 23,
+        "tn": 56880
+      },
+      "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+        "precision": 0.1929,
+        "recall": 0.8,
+        "f1": 0.3109,
+        "false_positive_rate": 0.00441,
+        "tp": 60,
+        "fp": 251,
+        "fn": 15,
+        "tn": 56636
+      }
+    },
+    "comparison": {
+      "GBTClassifier": {
+        "thresholds": {
+          "block": 0.611038,
+          "review": 0.027131,
+          "valid_best_f1": 0.8039
+        },
+        "test": {
+          "rows": 56962,
+          "fraud": 75,
+          "fraud_rate_pct": 0.1317,
+          "roc_auc": 0.9548,
+          "pr_auc": 0.7179,
+          "BLOCK_only (prob >= ambang blokir)": {
+            "precision": 0.8814,
+            "recall": 0.6933,
+            "f1": 0.7761,
+            "false_positive_rate": 0.00012,
+            "tp": 52,
+            "fp": 7,
+            "fn": 23,
+            "tn": 56880
+          },
+          "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+            "precision": 0.1929,
+            "recall": 0.8,
+            "f1": 0.3109,
+            "false_positive_rate": 0.00441,
+            "tp": 60,
+            "fp": 251,
+            "fn": 15,
+            "tn": 56636
+          }
+        }
+      },
+      "LogisticRegression (pembanding)": {
+        "thresholds": {
+          "block": 0.999992,
+          "review": 0.906765,
+          "valid_best_f1": 0.7755
+        },
+        "test": {
+          "rows": 56962,
+          "fraud": 75,
+          "fraud_rate_pct": 0.1317,
+          "roc_auc": 0.9832,
+          "pr_auc": 0.7347,
+          "BLOCK_only (prob >= ambang blokir)": {
+            "precision": 0.9615,
+            "recall": 0.6667,
+            "f1": 0.7874,
+            "false_positive_rate": 4e-05,
+            "tp": 50,
+            "fp": 2,
+            "fn": 25,
+            "tn": 56885
+          },
+          "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+            "precision": 0.1899,
+            "recall": 0.8533,
+            "f1": 0.3107,
+            "false_positive_rate": 0.0048,
+            "tp": 64,
+            "fp": 273,
+            "fn": 11,
+            "tn": 56614
+          }
+        }
+      }
+    },
+    "split": {
+      "by": "Time",
+      "train": "Time < 120396",
+      "valid": "120396 <= Time < 145248",
+      "test": "Time >= 145248 (juga data yang di-stream)",
+      "train_rows": 170882,
+      "train_fraud": 360
+    },
+    "train_seconds": 63.0,
+    "trained_at": "2026-10-11T14:15:17"
+  },
+  "banksim": {
+    "source": "banksim",
+    "algorithm": "GBTClassifier (Spark MLlib)",
+    "thresholds": {
+      "block": 0.267351,
+      "review": 0.137455,
+      "valid_best_f1": 0.7759
+    },
+    "test": {
+      "rows": 133231,
+      "fraud": 1440,
+      "fraud_rate_pct": 1.0808,
+      "roc_auc": 0.9964,
+      "pr_auc": 0.8371,
+      "BLOCK_only (prob >= ambang blokir)": {
+        "precision": 0.7901,
+        "recall": 0.7896,
+        "f1": 0.7899,
+        "false_positive_rate": 0.00229,
+        "tp": 1137,
+        "fp": 302,
+        "fn": 303,
+        "tn": 131489
+      },
+      "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+        "precision": 0.6928,
+        "recall": 0.8785,
+        "f1": 0.7746,
+        "false_positive_rate": 0.00426,
+        "tp": 1265,
+        "fp": 561,
+        "fn": 175,
+        "tn": 131230
+      }
+    },
+    "baseline_rule_category_or_amount": {
+      "rule": "kategori in ['es_health', 'es_home', 'es_hotelservices', 'es_leisure', 'es_otherservices', 'es_sportsandtoys', 'es_travel'] ATAU nominal >= 500",
+      "precision": 0.1956,
+      "recall": 0.7931,
+      "f1": 0.3138,
+      "false_positive_rate": 0.03563,
+      "tp": 1142,
+      "fp": 4696,
+      "fn": 298,
+      "tn": 127095
+    },
+    "risky_categories": [
+      "es_health",
+      "es_home",
+      "es_hotelservices",
+      "es_leisure",
+      "es_otherservices",
+      "es_sportsandtoys",
+      "es_travel"
+    ],
+    "global_mean_amount": 38.4777,
+    "split": {
+      "train_days": "0..107",
+      "valid_days": "108..143",
+      "test_days": "144..179 (juga data yang di-stream)",
+      "train_rows": 332592,
+      "train_fraud": 4320
+    },
+    "train_seconds": 82.9,
+    "trained_at": "2026-10-11T15:32:54"
+  }
+}

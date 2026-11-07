@@ -1,0 +1,11 @@
+Folder ini berisi dataset proyek. Nama file dikenali otomatis.
+
+  1) bank_transactions_data_2-selected-columns.csv    2.512 baris, tanpa label fraud          (ADA di ZIP)
+  2) bs140513_032310.csv  (BankSim)                    594.643 baris, label fraud (7.200)      (ADA di ZIP)
+  3) creditcard.csv                                    284.807 baris, label fraud Class (492)  (OPSIONAL - taruh sendiri,
+                                                       file terlalu besar untuk dikirim dalam ZIP)
+
+Tanpa creditcard.csv : 597.155 baris  -> syarat Manual DIT >= 10.000 TERPENUHI
+Dengan creditcard.csv: 881.962 baris
+
+Cek dengan:  python scripts/check_data.py

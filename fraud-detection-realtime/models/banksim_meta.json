@@ -1,0 +1,66 @@
+{
+  "source": "banksim",
+  "algorithm": "GBTClassifier (Spark MLlib)",
+  "thresholds": {
+    "block": 0.267351,
+    "review": 0.137455,
+    "valid_best_f1": 0.7759
+  },
+  "test": {
+    "rows": 133231,
+    "fraud": 1440,
+    "fraud_rate_pct": 1.0808,
+    "roc_auc": 0.9964,
+    "pr_auc": 0.8371,
+    "BLOCK_only (prob >= ambang blokir)": {
+      "precision": 0.7901,
+      "recall": 0.7896,
+      "f1": 0.7899,
+      "false_positive_rate": 0.00229,
+      "tp": 1137,
+      "fp": 302,
+      "fn": 303,
+      "tn": 131489
+    },
+    "REVIEW_or_BLOCK (prob >= ambang tinjau)": {
+      "precision": 0.6928,
+      "recall": 0.8785,
+      "f1": 0.7746,
+      "false_positive_rate": 0.00426,
+      "tp": 1265,
+      "fp": 561,
+      "fn": 175,
+      "tn": 131230
+    }
+  },
+  "baseline_rule_category_or_amount": {
+    "rule": "kategori in ['es_health', 'es_home', 'es_hotelservices', 'es_leisure', 'es_otherservices', 'es_sportsandtoys', 'es_travel'] ATAU nominal >= 500",
+    "precision": 0.1956,
+    "recall": 0.7931,
+    "f1": 0.3138,
+    "false_positive_rate": 0.03563,
+    "tp": 1142,
+    "fp": 4696,
+    "fn": 298,
+    "tn": 127095
+  },
+  "risky_categories": [
+    "es_health",
+    "es_home",
+    "es_hotelservices",
+    "es_leisure",
+    "es_otherservices",
+    "es_sportsandtoys",
+    "es_travel"
+  ],
+  "global_mean_amount": 38.4777,
+  "split": {
+    "train_days": "0..107",
+    "valid_days": "108..143",
+    "test_days": "144..179 (juga data yang di-stream)",
+    "train_rows": 332592,
+    "train_fraud": 4320
+  },
+  "train_seconds": 82.9,
+  "trained_at": "2026-10-11T15:32:54"
+}

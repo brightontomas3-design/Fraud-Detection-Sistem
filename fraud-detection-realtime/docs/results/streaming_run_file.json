@@ -1,0 +1,105 @@
+{
+  "type": "FACTUAL RESULT - diukur dari tabel PostgreSQL setelah streaming",
+  "ingestion": "file",
+  "generated_at": "2026-10-11T15:39:55",
+  "tables": {
+    "alerts": 49,
+    "predictions": 4003,
+    "rejected_records": 38,
+    "batch_metrics": 66,
+    "agg_minute": 9,
+    "transactions": 4003
+  },
+  "per_source_decision": [
+    {
+      "source": "bank",
+      "decision": "APPROVE",
+      "n": 582
+    },
+    {
+      "source": "bank",
+      "decision": "REVIEW",
+      "n": 11
+    },
+    {
+      "source": "banksim",
+      "decision": "APPROVE",
+      "n": 1661
+    },
+    {
+      "source": "banksim",
+      "decision": "BLOCK",
+      "n": 15
+    },
+    {
+      "source": "banksim",
+      "decision": "REVIEW",
+      "n": 4
+    },
+    {
+      "source": "card",
+      "decision": "APPROVE",
+      "n": 1711
+    },
+    {
+      "source": "card",
+      "decision": "BLOCK",
+      "n": 2
+    },
+    {
+      "source": "card",
+      "decision": "REVIEW",
+      "n": 17
+    }
+  ],
+  "rejected_by_reason": [
+    {
+      "reason": "MISSING_EVENT_ID",
+      "n": 11
+    },
+    {
+      "reason": "INVALID_AMOUNT",
+      "n": 10
+    },
+    {
+      "reason": "MISSING_AMOUNT",
+      "n": 9
+    },
+    {
+      "reason": "UNKNOWN_SOURCE",
+      "n": 8
+    }
+  ],
+  "duplicates_dropped_in_batch": 28,
+  "latency_ms": {
+    "mean": 3645.3,
+    "p50": 3494.4,
+    "p95": 5801.3,
+    "max": 9579.9
+  },
+  "batch_processing_ms": {
+    "mean": 1594.7,
+    "max": 5164.2,
+    "batches": 66.0
+  },
+  "online_evaluation_vs_label": [
+    {
+      "source": "card",
+      "n": 1730,
+      "fraud": 1,
+      "tp_block": 1,
+      "fp_block": 1,
+      "tp_review_or_block": 1,
+      "fp_review_or_block": 18
+    },
+    {
+      "source": "banksim",
+      "n": 1680,
+      "fraud": 17,
+      "tp_block": 12,
+      "fp_block": 3,
+      "tp_review_or_block": 15,
+      "fp_review_or_block": 4
+    }
+  ]
+}
